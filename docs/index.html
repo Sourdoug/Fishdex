@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fishdex — Le jeu de pêche pour Discord</title>
+  <meta name="description" content="Fishdex est un bot Discord de pêche : attrapez plus de 15 espèces, revendez-les au marché du jour et améliorez votre matériel.">
+  <meta property="og:title" content="Fishdex — Le jeu de pêche pour Discord">
+  <meta property="og:description" content="Pêchez, revendez au marché du jour et améliorez votre matériel. Devenez le meilleur pêcheur du serveur !">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎣</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="./"><span>🎣</span> Fishdex</a>
+    <nav class="nav-links">
+      <a href="#fonctionnalites">Le jeu</a>
+      <a href="#commandes">Commandes</a>
+      <a href="#demarrer">Démarrer</a>
+    </nav>
+    <a class="btn btn-discord" href="https://discord.com/oauth2/authorize?client_id=1570539868432367786&amp;scope=bot%20applications.commands&amp;permissions=19456">Ajouter à Discord</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="bobber" aria-hidden="true">🎣</div>
+      <h1>Le jeu de pêche<br>de <em>votre serveur Discord</em></h1>
+      <p class="lead">Lancez votre ligne, attrapez des poissons rares, revendez-les au meilleur prix et devenez le pêcheur le plus riche du serveur.</p>
+      <div class="actions">
+        <a class="btn btn-discord" href="https://discord.com/oauth2/authorize?client_id=1570539868432367786&amp;scope=bot%20applications.commands&amp;permissions=19456">➕ Ajouter Fishdex à mon serveur</a>
+        <a class="btn btn-ghost" href="#commandes">Voir les commandes</a>
+      </div>
+    </div>
+    <svg class="waves" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="#0b2540" d="M0,45 C240,90 480,0 720,40 C960,80 1200,10 1440,45 L1440,90 L0,90 Z"/>
+    </svg>
+  </section>
+
+  <section id="fonctionnalites" class="alt">
+    <div class="wrap">
+      <h2>Comment on joue ?</h2>
+      <p class="subtitle">Une boucle simple et addictive : pêcher, vendre, s'équiper, recommencer.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="icon">🐟</div>
+          <h3>Pêchez</h3>
+          <p>Plus de 15 espèces, de la vieille botte au cœlacanthe légendaire. Chaque prise a son propre poids : plus il est lourd, plus il vaut cher.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📈</div>
+          <h3>Vendez au bon moment</h3>
+          <p>Le marché change chaque jour. Le prix de chaque espèce monte ou descend : surveillez les cours avant de vendre votre bourriche.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🛠️</div>
+          <h3>Améliorez votre matériel</h3>
+          <p>Canne, moulinet, ligne, bourriche et appâts : chaque amélioration vous rapproche des poissons les plus rares.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🏆</div>
+          <h3>Dominez le classement</h3>
+          <p>Comparez votre fortune et votre plus grosse prise avec les autres membres du serveur.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Six niveaux de rareté</h2>
+      <p class="subtitle">Une meilleure canne et de bons appâts augmentent vos chances de tomber sur les plus belles prises. Attention : un poisson trop lourd peut casser votre ligne !</p>
+      <div class="rarities">
+        <span class="pill r-dechet">🗑️ Déchet</span>
+        <span class="pill r-commun">⚪ Commun</span>
+        <span class="pill r-peu">🟢 Peu commun</span>
+        <span class="pill r-rare">🔵 Rare</span>
+        <span class="pill r-epique">🟣 Épique</span>
+        <span class="pill r-legend">🟡 Légendaire</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="commandes" class="alt">
+    <div class="wrap">
+      <h2>Les commandes</h2>
+      <p class="subtitle">Préfixe <code>!</code> dans n'importe quel salon. Les mêmes commandes existent aussi en commandes slash (<code>/pecher</code>…).</p>
+      <div class="table-scroll">
+        <table class="commands">
+          <thead><tr><th>Commande</th><th>Effet</th></tr></thead>
+          <tbody>
+            <tr><td><code>!pecher</code> ou <code>!p</code></td><td>Lancer sa ligne</td></tr>
+            <tr><td><code>!inventaire</code> ou <code>!inv</code></td><td>Voir sa bourriche et sa valeur</td></tr>
+            <tr><td><code>!vendre</code></td><td>Tout vendre</td></tr>
+            <tr><td><code>!vendre carpe</code></td><td>Vendre un seul type de poisson</td></tr>
+            <tr><td><code>!prix</code></td><td>Cours du marché du jour</td></tr>
+            <tr><td><code>!boutique</code></td><td>Matériel et appâts à vendre</td></tr>
+            <tr><td><code>!acheter canne_fibre</code></td><td>Acheter un objet de la boutique</td></tr>
+            <tr><td><code>!profil</code> ou <code>!profil @joueur</code></td><td>Solde, matériel et statistiques</td></tr>
+            <tr><td><code>!classement</code> ou <code>!top</code></td><td>Les pêcheurs les plus riches</td></tr>
+            <tr><td><code>!aide</code></td><td>Liste des commandes</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="demarrer">
+    <div class="wrap">
+      <h2>Démarrer en 30 secondes</h2>
+      <p class="subtitle">Aucune configuration nécessaire.</p>
+      <div class="steps">
+        <div class="card"><h3>Invitez le bot</h3><p>Cliquez sur « Ajouter à Discord » et choisissez votre serveur.</p></div>
+        <div class="card"><h3>Lancez votre ligne</h3><p>Tapez <code>!pecher</code> dans un salon. Vous commencez avec 50 pièces et une canne en bambou.</p></div>
+        <div class="card"><h3>Vendez et équipez-vous</h3><p><code>!vendre</code> puis <code>!boutique</code> pour viser les poissons légendaires.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt cta">
+    <div class="wrap">
+      <h2>Prêt à mordre à l'hameçon ?</h2>
+      <p>Ajoutez Fishdex gratuitement à votre serveur Discord.</p>
+      <a class="btn btn-discord" href="https://discord.com/oauth2/authorize?client_id=1570539868432367786&amp;scope=bot%20applications.commands&amp;permissions=19456">➕ Ajouter à Discord</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Fishdex. Projet indépendant, non affilié à Discord.</span>
+    <span><a href="conditions.html">Conditions d'utilisation</a><a href="confidentialite.html">Confidentialité</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
