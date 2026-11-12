@@ -4,16 +4,21 @@ Mini-jeu de pêche pour Discord : lancez votre ligne, attrapez des poissons de d
 
 ## Commandes
 
+Préfixe : `!` (modifiable avec `PREFIX=` dans `.env`). Les mêmes commandes existent aussi en commandes slash (`/pecher`…).
+
 | Commande | Description |
 |---|---|
-| `/pecher` | Lancer sa ligne (avec un bouton **Relancer**) |
-| `/inventaire` | Voir sa bourriche et la valeur estimée des poissons |
-| `/vendre [poisson]` | Vendre un type de poisson, ou tout vendre si vide |
-| `/prix` | Prix de chaque poisson aujourd'hui (📈 / 📉) |
-| `/boutique` | Matériel et appâts disponibles |
-| `/acheter <objet>` | Acheter une amélioration ou des appâts |
-| `/profil [joueur]` | Solde, matériel, statistiques |
-| `/classement` | Top 10 des joueurs les plus riches |
+| `!pecher` (`!p`) | Lancer sa ligne (avec un bouton **Relancer**) |
+| `!inventaire` (`!inv`) | Voir sa bourriche et la valeur estimée des poissons |
+| `!vendre` / `!vendre carpe` | Tout vendre, ou un seul type de poisson |
+| `!prix` | Prix de chaque poisson aujourd'hui (📈 / 📉) |
+| `!boutique` | Matériel et appâts, avec leur code |
+| `!acheter <code>` | Ex. `!acheter canne_fibre` (le nom fonctionne aussi) |
+| `!profil` / `!profil @joueur` | Solde, matériel, statistiques |
+| `!classement` (`!top`) | Top 10 des joueurs les plus riches |
+| `!aide` | Liste des commandes |
+
+> Les commandes `!` nécessitent d'activer **Message Content Intent** dans le portail développeur Discord (Bot → Privileged Gateway Intents).
 
 ## Règles du jeu
 

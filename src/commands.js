@@ -71,7 +71,7 @@ function handleCast(user) {
   }
   if (res.type === 'full') {
     return {
-      ...ephemeral(`🪣 Votre bourriche est pleine (${res.capacity} poissons) ! Vendez avec \`/vendre\` ou améliorez-la dans la \`/boutique\`.`),
+      ...ephemeral(`🪣 Votre bourriche est pleine (${res.capacity} poissons) ! Vendez avec \`!vendre\` ou améliorez-la dans la \`!boutique\`.`),
       components: [actionRow()],
     };
   }
@@ -88,7 +88,7 @@ function handleCast(user) {
       .setColor(0xe74c3c)
       .setDescription(
         `💥 **Votre ligne a cassé !**\nUn(e) ${fishLabel(res.fish)} de **${kgFmt(res.kg)}** (${r.label}) s'est échappé(e).\n` +
-          `Votre ligne ne supporte que ${res.maxKg} kg — achetez une meilleure ligne dans la \`/boutique\`.${baitNote}`,
+          `Votre ligne ne supporte que ${res.maxKg} kg — achetez une meilleure ligne dans la \`!boutique\`.${baitNote}`,
       );
   } else {
     const r = RARITIES[res.fish.rarity];
@@ -113,7 +113,7 @@ function handleInventory(user) {
     .setFooter({ text: `${player.inventory.length}/${gear.bourriche.capacity} poissons` });
 
   if (player.inventory.length === 0) {
-    embed.setDescription('Votre bourriche est vide. Utilisez `/pecher` !');
+    embed.setDescription('Votre bourriche est vide. Utilisez `!pecher` !');
     return { embeds: [embed] };
   }
 
@@ -173,7 +173,7 @@ function handleShop(user) {
   const embed = new EmbedBuilder()
     .setColor(0x3498db)
     .setTitle('🏪 Boutique du pêcheur')
-    .setDescription(`Votre solde : **${fmt(player.coins)}** ${COIN}\nAchetez avec \`/acheter\`.`);
+    .setDescription(`Votre solde : **${fmt(player.coins)}** ${COIN}\nAchetez avec \`!acheter <code>\`, par exemple \`!acheter canne_fibre\`.`);
 
   const stat = {
     canne: (t) => `touche ${Math.round(t.catchChance * 100)} %, chance +${Math.round(t.luck * 100)} %`,
@@ -184,13 +184,13 @@ function handleShop(user) {
   for (const [key, cat] of Object.entries(CATEGORIES)) {
     const owned = player.equipment[key];
     const lines = cat.tiers.map((t, lvl) => {
-      const status = lvl === owned ? '✅ équipé' : lvl < owned ? '✔️' : `${fmt(t.price)} ${COIN}`;
+      const status = lvl === owned ? '✅ équipé' : lvl < owned ? '✔️' : `${fmt(t.price)} ${COIN} · \`${t.id}\``;
       return `${lvl === owned ? '**' : ''}${t.name}${lvl === owned ? '**' : ''} — ${stat[key](t)} · ${status}`;
     });
     embed.addFields({ name: `${cat.emoji} ${cat.label}`, value: `-# ${cat.description}\n${lines.join('\n')}` });
   }
   const baitLines = BAITS.map(
-    (b) => `${b.emoji} ${b.name} — chance +${Math.round(b.luck * 100)} % · ${fmt(b.price)} ${COIN} · possédés : ${player.baits[b.id] || 0}`,
+    (b) => `${b.emoji} ${b.name} — chance +${Math.round(b.luck * 100)} % · ${fmt(b.price)} ${COIN} · \`${b.id}\` · possédés : ${player.baits[b.id] || 0}`,
   );
   embed.addFields({ name: '🪱 Appâts', value: `-# 1 appât consommé par lancer, le meilleur est utilisé en premier.\n${baitLines.join('\n')}` });
   return { embeds: [embed] };
@@ -290,4 +290,17 @@ async function handleInteraction(interaction) {
   }
 }
 
-module.exports = { definitions, handleInteraction };
+module.exports = {
+  definitions,
+  handleInteraction,
+  handlers: {
+    cast: handleCast,
+    inventory: handleInventory,
+    sell: handleSell,
+    prices: handlePrices,
+    shop: handleShop,
+    buy: handleBuy,
+    profile: handleProfile,
+    leaderboard: handleLeaderboard,
+  },
+};
