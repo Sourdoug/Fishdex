@@ -6,6 +6,7 @@ const {
   ButtonBuilder,
   ButtonStyle,
   MessageFlags,
+  PermissionFlagsBits,
 } = require('discord.js');
 const { RARITIES, FISH, FISH_BY_ID } = require('./data/fish');
 const { CATEGORIES, BAITS, PURCHASABLE } = require('./data/shop');
@@ -13,6 +14,7 @@ const game = require('./game');
 const storage = require('./storage');
 
 const COIN = '🪙';
+const MAX_GIVE = 1_000_000;
 const fmt = (n) => n.toLocaleString('fr-FR');
 const kgFmt = (kg) => `${kg.toLocaleString('fr-FR', { maximumFractionDigits: 2 })} kg`;
 const fishLabel = (fish) => `${fish.emoji} ${fish.name}`;
@@ -48,6 +50,20 @@ const definitions = [
     .setDescription('Voir votre profil de pêcheur (ou celui d\'un autre joueur)')
     .addUserOption((o) => o.setName('joueur').setDescription('Joueur à consulter')),
   new SlashCommandBuilder().setName('classement').setDescription('Les pêcheurs les plus riches'),
+  new SlashCommandBuilder()
+    .setName('give')
+    .setDescription('[Admin] Donner (ou retirer) des pièces à un joueur')
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+    .setDMPermission(false)
+    .addUserOption((o) => o.setName('joueur').setDescription('Joueur à créditer').setRequired(true))
+    .addIntegerOption((o) =>
+      o
+        .setName('montant')
+        .setDescription('Nombre de pièces (négatif pour en retirer)')
+        .setRequired(true)
+        .setMinValue(-MAX_GIVE)
+        .setMaxValue(MAX_GIVE),
+    ),
 ];
 
 // ---------- Composants ----------
@@ -213,6 +229,38 @@ function handleBuy(user, itemId) {
   };
 }
 
+// ---------- Administration ----------
+
+const MAX_GIVE_MSG = `Le montant doit être un nombre entier entre -${fmt(MAX_GIVE)} et ${fmt(MAX_GIVE)}, différent de 0.`;
+
+/** Donne des pièces. admin = utilisateur qui lance la commande (pour le journal). */
+function handleGive(admin, target, amount) {
+  if (!target) return ephemeral('❓ Indiquez le joueur, par exemple `!give @joueur 500`.');
+  if (target.bot) return ephemeral('🤖 Les bots ne pêchent pas, impossible de leur donner des pièces.');
+  if (!Number.isInteger(amount) || amount === 0 || Math.abs(amount) > MAX_GIVE) {
+    return ephemeral(`❌ ${MAX_GIVE_MSG}`);
+  }
+  const player = storage.getPlayer(target.id);
+  const applied = game.addCoins(player, amount);
+  storage.save();
+  console.log(`[give] ${admin.username} (${admin.id}) -> ${target.username} (${target.id}) : ${applied} pièces, solde ${player.coins}`);
+
+  const name = target.displayName ?? target.username;
+  const text = applied >= 0
+    ? `🎁 **${fmt(applied)}** ${COIN} ont été donnés à **${name}** !`
+    : `💸 **${fmt(-applied)}** ${COIN} ont été retirés à **${name}**.`;
+  return {
+    embeds: [
+      new EmbedBuilder()
+        .setColor(applied >= 0 ? 0x2ecc71 : 0xe67e22)
+        .setDescription(text)
+        .setFooter({ text: `Nouveau solde : ${fmt(player.coins)} pièces` }),
+    ],
+  };
+}
+
+const isAdmin = (permissions) => Boolean(permissions?.has(PermissionFlagsBits.ManageGuild));
+
 function handleProfile(user) {
   const player = storage.getPlayer(user.id);
   const gear = game.getGear(player);
@@ -285,6 +333,11 @@ async function handleInteraction(interaction) {
       return interaction.reply(handleBuy(user, options.getString('objet', true)));
     case 'profil':
       return interaction.reply(handleProfile(options.getUser('joueur') ?? user));
+    case 'give':
+      if (!isAdmin(interaction.memberPermissions)) {
+        return interaction.reply(ephemeral('⛔ Cette commande est réservée aux administrateurs du serveur.'));
+      }
+      return interaction.reply(handleGive(user, options.getUser('joueur', true), options.getInteger('montant', true)));
     case 'classement':
       return interaction.reply(await handleLeaderboard(interaction.client));
   }
@@ -293,6 +346,7 @@ async function handleInteraction(interaction) {
 module.exports = {
   definitions,
   handleInteraction,
+  isAdmin,
   handlers: {
     cast: handleCast,
     inventory: handleInventory,
@@ -302,5 +356,6 @@ module.exports = {
     buy: handleBuy,
     profile: handleProfile,
     leaderboard: handleLeaderboard,
+    give: handleGive,
   },
 };

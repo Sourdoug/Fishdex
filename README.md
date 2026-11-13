@@ -17,6 +17,7 @@ Préfixe : `!` (modifiable avec `PREFIX=` dans `.env`). Les mêmes commandes exi
 | `!profil` / `!profil @joueur` | Solde, matériel, statistiques |
 | `!classement` (`!top`) | Top 10 des joueurs les plus riches |
 | `!aide` | Liste des commandes |
+| `!give @joueur 500` (`!donner`) | **Admin** (permission « Gérer le serveur ») : donner des pièces, ou en retirer avec un montant négatif |
 
 > Les commandes `!` nécessitent d'activer **Message Content Intent** dans le portail développeur Discord (Bot → Privileged Gateway Intents).
 

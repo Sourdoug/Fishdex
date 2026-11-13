@@ -78,3 +78,47 @@ test('!aide liste les commandes', async () => {
   await handleMessage(m);
   assert.match(m.replies[0].embeds[0].data.description, /!pecher/);
 });
+
+// ---------- !give ----------
+const { PermissionFlagsBits, Collection } = require('discord.js');
+
+function giveMessage(content, { admin, target }) {
+  const m = fakeMessage(content, 'admin1');
+  m.member = { permissions: { has: (perm) => admin && perm === PermissionFlagsBits.ManageGuild } };
+  const users = new Collection(target ? [[target.id, target]] : []);
+  m.mentions = { users, repliedUser: null };
+  return m;
+}
+const victime = { id: 'u3', username: 'raleur', bot: false };
+
+test('!give est refusé aux joueurs sans permission', async () => {
+  const player = storage.getPlayer('u3');
+  const before = player.coins;
+  const m = giveMessage('!give <@u3> 500', { admin: false, target: victime });
+  await handleMessage(m);
+  assert.equal(player.coins, before);
+  assert.match(m.replies[0].content, /réservée aux administrateurs/);
+});
+
+test('!give donne puis retire des pièces (jamais sous 0)', async () => {
+  const player = storage.getPlayer('u3');
+  player.coins = 50;
+  await handleMessage(giveMessage('!give <@u3> 500', { admin: true, target: victime }));
+  assert.equal(player.coins, 550);
+  await handleMessage(giveMessage('!donner <@u3> -10000', { admin: true, target: victime }));
+  assert.equal(player.coins, 0);
+});
+
+test('!give refuse un montant invalide ou un bot', async () => {
+  const player = storage.getPlayer('u3');
+  player.coins = 50;
+  for (const content of ['!give <@u3>', '!give <@u3> abc', '!give <@u3> 0', '!give <@u3> 99999999']) {
+    const m = giveMessage(content, { admin: true, target: victime });
+    await handleMessage(m);
+    assert.match(m.replies[0].content, /❌/);
+  }
+  const bot = giveMessage('!give <@b1> 10', { admin: true, target: { id: 'b1', username: 'bot', bot: true } });
+  await handleMessage(bot);
+  assert.match(bot.replies[0].content, /bots/);
+  assert.equal(player.coins, 50);
+});

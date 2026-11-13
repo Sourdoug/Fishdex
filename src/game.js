@@ -197,6 +197,16 @@ function inventoryValue(player, date = new Date()) {
  * Achète un objet de la boutique.
  * Retourne { ok: true, entry } ou { ok: false, error }
  */
+/**
+ * Ajoute (ou retire si négatif) des pièces. Le solde ne descend jamais sous 0.
+ * Retourne le montant réellement appliqué.
+ */
+function addCoins(player, amount) {
+  const before = player.coins;
+  player.coins = Math.max(0, player.coins + Math.trunc(amount));
+  return player.coins - before;
+}
+
 function buy(player, itemId) {
   const entry = ITEMS[itemId];
   if (!entry || entry.item.price <= 0) {
@@ -237,4 +247,5 @@ module.exports = {
   sell,
   inventoryValue,
   buy,
+  addCoins,
 };

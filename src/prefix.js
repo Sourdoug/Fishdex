@@ -3,7 +3,7 @@
 const { EmbedBuilder } = require('discord.js');
 const { FISH } = require('./data/fish');
 const { PURCHASABLE } = require('./data/shop');
-const { handlers } = require('./commands');
+const { handlers, isAdmin } = require('./commands');
 
 const PREFIX = process.env.PREFIX || '!';
 
@@ -47,6 +47,7 @@ function helpEmbed() {
             `\`${p}acheter <code>\` — ex. \`${p}acheter canne_fibre\``,
             `\`${p}profil\` ou \`${p}profil @joueur\` — profil de pêcheur`,
             `\`${p}classement\` (ou \`${p}top\`) — les plus riches`,
+            `\`${p}give @joueur 500\` — *(admin)* donner des pièces (négatif pour en retirer)`,
           ].join('\n'),
         ),
     ],
@@ -108,6 +109,20 @@ async function handleMessage(message) {
     case 'top':
       reply = await handlers.leaderboard(message.client);
       break;
+    case 'give':
+    case 'donner': {
+      if (!isAdmin(message.member?.permissions)) {
+        reply = { content: '⛔ Cette commande est réservée aux administrateurs du serveur.' };
+        break;
+      }
+      // Ignore l'auteur du message auquel on répond (Discord le compte parfois comme mention).
+      const repliedId = message.mentions.repliedUser?.id;
+      const target = message.mentions.users.find((u) => u.id !== repliedId) ?? message.mentions.users.first();
+      const amountArg = args.find((a) => /^[-+]?\d[\d\s_.]*$/.test(a));
+      const amount = amountArg ? Number(amountArg.replace(/[\s_.]/g, '')) : NaN;
+      reply = handlers.give(user, target, amount);
+      break;
+    }
     case 'aide':
     case 'help':
       reply = helpEmbed();
