@@ -190,7 +190,7 @@ function handleShop(user) {
     embed.addFields({ name: `${cat.emoji} ${cat.label}`, value: `-# ${cat.description}\n${lines.join('\n')}` });
   }
   const baitLines = BAITS.map(
-    (b) => `${b.emoji} ${b.name} — chance +${Math.round(b.luck * 100)} % · ${fmt(b.price)} ${COIN} · \`${b.id}\` · possédés : ${player.baits[b.id] || 0}`,
+    (b) => `${b.emoji} ${b.name} — touche +${Math.round(b.bite * 100)} %, rareté +${Math.round(b.luck * 100)} % · ${fmt(b.price)} ${COIN} · \`${b.id}\` · possédés : ${player.baits[b.id] || 0}`,
   );
   embed.addFields({ name: '🪱 Appâts', value: `-# 1 appât consommé par lancer, le meilleur est utilisé en premier.\n${baitLines.join('\n')}` });
   return { embeds: [embed] };

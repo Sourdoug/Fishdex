@@ -3,6 +3,7 @@ const { RARITIES, FISH, FISH_BY_ID } = require('./data/fish');
 const { CATEGORIES, BAITS, ITEMS } = require('./data/shop');
 
 const STARTING_COINS = 50;
+const MAX_CATCH_CHANCE = 0.98;
 
 function createPlayer(id) {
   return {
@@ -128,8 +129,9 @@ function cast(player, now = Date.now(), rng = Math.random) {
   const bait = bestBait(player);
   if (bait) player.baits[bait.id]--;
   const luck = gear.canne.luck + (bait ? bait.luck : 0);
+  const catchChance = Math.min(MAX_CATCH_CHANCE, gear.canne.catchChance + (bait ? bait.bite : 0));
 
-  if (rng() > gear.canne.catchChance) {
+  if (rng() > catchChance) {
     return { type: 'miss', bait };
   }
 

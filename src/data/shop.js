@@ -50,10 +50,11 @@ const CATEGORIES = {
 };
 
 // Appâts : consommables (1 utilisé par lancer). Le meilleur appât possédé est utilisé en priorité.
+// bite = bonus à la chance de touche, luck = bonus de rareté.
 const BAITS = [
-  { id: 'appat_asticots', name: 'Asticots (x10)',     emoji: '🪱', price: 30,  quantity: 10, luck: 0.10 },
-  { id: 'appat_vers',     name: 'Vers de terre (x10)', emoji: '🪱', price: 90,  quantity: 10, luck: 0.25 },
-  { id: 'appat_leurre',   name: 'Leurre doré (x10)',  emoji: '🌟', price: 400, quantity: 10, luck: 0.60 },
+  { id: 'appat_asticots', name: 'Asticots (x10)',     emoji: '🪱', price: 30,  quantity: 10, bite: 0.10, luck: 0.05 },
+  { id: 'appat_vers',     name: 'Vers de terre (x10)', emoji: '🪱', price: 90,  quantity: 10, bite: 0.15, luck: 0.20 },
+  { id: 'appat_leurre',   name: 'Leurre doré (x10)',  emoji: '🌟', price: 400, quantity: 10, bite: 0.20, luck: 0.50 },
 ];
 
 // Index : id d'objet -> { type, category?, level?, item }

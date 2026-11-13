@@ -121,3 +121,27 @@ test('la chance augmente la probabilité des poissons rares', () => {
   const share = (w) => w.legendaire / Object.values(w).reduce((a, b) => a + b, 0);
   assert.ok(share(high) > share(low) * 5);
 });
+
+test('les asticots augmentent la chance de touche', () => {
+  // canne en bambou : 60 % de touche, 70 % avec des asticots
+  const sans = game.createPlayer('1');
+  assert.equal(game.cast(sans, 1_000_000, seq(0.65, 0.5, 0, 0)).type, 'miss');
+
+  const avec = game.createPlayer('2');
+  avec.baits.appat_asticots = 1;
+  assert.equal(game.cast(avec, 1_000_000, seq(0.65, 0.5, 0, 0)).type, 'catch');
+  assert.equal(avec.baits.appat_asticots, 0);
+});
+
+test('la chance de touche est plafonnée à 98 %', () => {
+  const p = game.createPlayer('1');
+  p.equipment.canne = 4; // 95 %
+  p.baits.appat_leurre = 1; // +20 %
+  assert.equal(game.cast(p, 1_000_000, seq(0.985)).type, 'miss');
+});
+
+test('les légendaires restent rares même avec le meilleur matériel', () => {
+  const w = game.rarityWeights(1.5); // canne mythique + leurre doré
+  const total = Object.values(w).reduce((a, b) => a + b, 0);
+  assert.ok(w.legendaire / total < 0.04);
+});

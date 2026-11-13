@@ -7,8 +7,8 @@ const RARITIES = {
   commun:     { label: 'Commun',     emoji: '⚪', color: 0xbdc3c7, weight: 60, tier: 0 },
   peu_commun: { label: 'Peu commun', emoji: '🟢', color: 0x2ecc71, weight: 25, tier: 1 },
   rare:       { label: 'Rare',       emoji: '🔵', color: 0x3498db, weight: 10, tier: 2 },
-  epique:     { label: 'Épique',     emoji: '🟣', color: 0x9b59b6, weight: 4,  tier: 3 },
-  legendaire: { label: 'Légendaire', emoji: '🟡', color: 0xf1c40f, weight: 1,  tier: 4 },
+  epique:     { label: 'Épique',     emoji: '🟣', color: 0x9b59b6, weight: 3,  tier: 3 },
+  legendaire: { label: 'Légendaire', emoji: '🟡', color: 0xf1c40f, weight: 0.15, tier: 4 },
 };
 
 const FISH = [
